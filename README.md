@@ -11,7 +11,7 @@ The main smart contract struct that holds the state of the contract.
 ### Fields:
 - `patients`: A lookup map that associates patient accounts with their medical information represented by Patient struct.
 - `public_records`: A vector containing public information related to medical records.
->> Note: Public records are accessible to anyone for anonymous medical research purposes. The information in public records is anonymized to protect patient identities and ensure confidentiality. Researchers can gain valuable insights from the aggregated data while respecting the privacy of individual patients, promoting responsible use of medical information for research and public health initiatives.
+> Note: Public records are accessible to anyone for anonymous medical research purposes. The information in public records is anonymized to protect patient identities and ensure confidentiality. Researchers can gain valuable insights from the aggregated data while respecting the privacy of individual patients, promoting responsible use of medical information for research and public health initiatives.
 
 ### `Patient`
 Represents a patient's comprehensive medical information.
@@ -37,7 +37,7 @@ Fields:
 - record_type: A RecordType enum value representing the type of medical record.
 - birthday: A string representing the patient's birthday.
 - gender: A string representing the patient's gender.
->> Note: The `PublicRecord` struct contains public information related to a medical record. We require the user to specify the patient's birthday and gender for the record to be public because we believe this information is important for medical research and analysis. 
+> Note: The `PublicRecord` struct contains public information related to a medical record. We require the user to specify the patient's birthday and gender for the record to be public because we believe this information is important for medical research and analysis. 
 
 ### `Allergy`
 Represents an allergy a patient might have.
@@ -52,7 +52,7 @@ Represents a medical procedure performed on a patient.
 The smart contract provides methods to add patients, update patient information, add medical records, allergies, immunizations, and procedures.
 It also allows users to access patient information and retrieve medical records.
 
->> Note: This is a brief overview of the smart contract. For detailed information about the functions and methods available in the contract, please refer to the contract's code and associated documentation.
+> Note: This is a brief overview of the smart contract. For detailed information about the functions and methods available in the contract, please refer to the contract's code and associated documentation.
 
 ------------------
 ## Development
