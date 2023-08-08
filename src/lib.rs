@@ -35,7 +35,6 @@ impl Contract {
 
     /// Add a new patient to the contract with the provided
     /// medical information and personal details
-    #[payable]
     pub fn add_patient(
         &mut self,
         full_name: String,
@@ -43,10 +42,6 @@ impl Contract {
         gender: String,
         blood_type: String,
     ) {
-        // Assert that 1 Yocto NEAR was attached
-        utils::assert_one_yocto_near();
-        // Transfer the attached deposit to the developers
-        self.transfer_to_developers();
         let account_id = env::predecessor_account_id();
         require!(
             !self.patients.contains_key(&account_id),
