@@ -15,18 +15,28 @@ mod utils;
 
 // Define the contract
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+#[derive(BorshDeserialize, BorshSerialize)]
 pub struct Contract {
     patients: LookupMap<AccountId, Patient>,
     public_records: Vector<PublicRecord>,
 }
 
+impl Default for Contract {
+    fn default() -> Self {
+        Self{
+            patients: LookupMap::new(b"patients".to_vec()),
+            public_records: Vector::new(b"public_records".to_vec()),
+        }
+    }
+  }
 #[near_bindgen]
 impl Contract {
     /// Initialize the contract
+    
     #[init]
     pub fn new() -> Self {
-        assert!(!env::state_exists(), "Already initialized");
+        log!("Contract done");
+        require!(!env::state_exists(), "Already initialized");
         Self {
             patients: LookupMap::new(b"patients".to_vec()),
             public_records: Vector::new(b"public_records".to_vec()),
@@ -65,7 +75,7 @@ impl Contract {
 
     /// Get patient information for the calling account
     pub fn get_patient(&self) -> Option<Patient> {
-        let account_id = env::predecessor_account_id();
+        let account_id = env::current_account_id();
         require!(
             self.patients.contains_key(&account_id),
             "Patient not found."
