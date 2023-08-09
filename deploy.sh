@@ -10,4 +10,5 @@ fi
 echo ">> Deploying contract"
 
 # https://docs.near.org/tools/near-cli#near-dev-deploy
-near dev-deploy --wasmFile ./target/wasm32-unknown-unknown/release/medibridge_contract_rust.wasm
+near dev-deploy ./target/wasm32-unknown-unknown/release/medibridge_contract_rust.wasm   new  '{}'  
+# near deploy testing1111.testnet ./target/wasm32-unknown-unknown/release/medibridge_contract_rust.wasm   new  '{}'  
