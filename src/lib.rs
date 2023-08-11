@@ -15,17 +15,16 @@ mod utils;
 
 // Define the contract
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize,PanicOnDefault)]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
     patients: LookupMap<AccountId, Patient>,
     public_records: Vector<PublicRecord>,
 }
 
-
 #[near_bindgen]
 impl Contract {
     /// Initialize the contract
-    
+
     #[init]
     pub fn new() -> Self {
         assert!(!env::state_exists(), "Already initialized");
@@ -45,7 +44,6 @@ impl Contract {
         gender: String,
         blood_type: String,
     ) {
-        
         let account_id = env::predecessor_account_id();
 
         require!(
@@ -69,19 +67,19 @@ impl Contract {
     }
 
     /// Get patient information for the calling account
-    /// 
-    pub fn get_patient(&self) -> Option<Patient> {
+    pub fn get_patient(&self) -> Patient {
         let account_id = env::predecessor_account_id();
         require!(
             self.patients.contains_key(&account_id),
             "Patient not found."
         );
 
-        self.patients.get(&account_id)
+        // We can safely unwrap here because we know the key exists
+        self.patients.get(&account_id).unwrap()
     }
-    pub fn my_account(&self)->AccountId{
-        let account_id:AccountId = env::current_account_id();
-        log!(account_id);
+    pub fn my_account(&self) -> AccountId {
+        let account_id: AccountId = env::current_account_id();
+        log!("Caller Account ID: {}", account_id);
         account_id
     }
     /// Get all public records stored on-chain.
