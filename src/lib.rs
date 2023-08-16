@@ -77,6 +77,18 @@ impl Contract {
         // We can safely unwrap here because we know the key exists
         self.patients.get(&account_id).unwrap()
     }
+
+    // WORKAROUND SOLUTION TO FETCH PATIENT INFORMATION
+    pub fn get_patient_workaround(&self, account_id:AccountId) -> Patient {
+        // let account_id = env::predecessor_account_id();
+        require!(
+            self.patients.contains_key(&account_id),
+            "Patient not found."
+        );
+
+        // We can safely unwrap here because we know the key exists
+        self.patients.get(&account_id).unwrap()
+    }
     pub fn my_account(&self) -> AccountId {
         let account_id: AccountId = env::current_account_id();
         log!("Caller Account ID: {}", account_id);
