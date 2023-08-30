@@ -79,21 +79,20 @@ impl Contract {
     }
 
     // WORKAROUND SOLUTION TO FETCH PATIENT INFORMATION
-    pub fn get_patient_workaround(&self, account_id:&AccountId) -> Patient {
+    pub fn get_patient_workaround(&self, account_id: &AccountId) -> Patient {
         // let account_id = env::predecessor_account_id();
-        require!(
-            self.patients.contains_key(account_id),
-            "Patient not found."
-        );
+        require!(self.patients.contains_key(account_id), "Patient not found.");
 
         // We can safely unwrap here because we know the key exists
         self.patients.get(account_id).unwrap()
     }
+
     pub fn my_account(&self) -> AccountId {
         let account_id: AccountId = env::current_account_id();
         log!("Caller Account ID: {}", account_id);
         account_id
     }
+
     /// Get all public records stored on-chain.
     pub fn get_all_public_records(&self) -> Vec<PublicRecord> {
         self.public_records.to_vec()
@@ -152,6 +151,26 @@ impl Contract {
         // Update the patient in the contract storage
         self.patients.insert(&account_id, &patient);
         log!("Updated birthday for patient with ID: {}", account_id);
+    }
+
+    /// Update the gender of the patient
+    pub fn gender(&mut self, gender: String) {
+        let account_id = env::predecessor_account_id();
+        require!(
+            self.patients.contains_key(&account_id),
+            "Patient not found."
+        );
+        log!("Updating gender for patient with ID: {}", account_id);
+        log!("New gender: {}", gender);
+
+        let mut patient = self.patients.get(&account_id).expect("Patient not found.");
+
+        // Update the patient's gender
+        patient.update_gender(gender);
+
+        // Update the patient in the contract storage
+        self.patients.insert(&account_id, &patient);
+        log!("Updated gender for patient with ID: {}", account_id);
     }
 
     /// Update the blood type of the patient

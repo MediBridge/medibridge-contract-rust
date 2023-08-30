@@ -205,6 +205,11 @@ impl Patient {
         self.birthday = birthday;
     }
 
+    /// Update the gender of the patient    
+    pub fn update_gender(&mut self, gender: String) {
+        self.gender = gender;
+    }
+
     /// Update the blood type of the patient
     pub fn update_blood_type(&mut self, blood_type: String) {
         self.blood_type = blood_type;
@@ -239,6 +244,11 @@ impl Patient {
     pub fn add_family_medical_record(&mut self, family_medical_record: FamilyMedicalRecord) {
         self.records
             .push(RecordType::FamilyMedicalRecord(family_medical_record));
+    }
+
+    /// Get the patient's full name
+    pub fn full_name(&self) -> String {
+        self.full_name.clone()
     }
 
     /// Get the patient's birthday
