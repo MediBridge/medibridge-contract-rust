@@ -120,6 +120,16 @@ impl Allergy {
     pub fn new(allergen: String, severity: String) -> Self {
         Self { allergen, severity }
     }
+
+    /// Return the allergen
+    pub fn allergen(&self) -> String {
+        self.allergen.clone()
+    }
+
+    /// Return the severity
+    pub fn severity(&self) -> String {
+        self.severity.clone()
+    }
 }
 
 // Struct representing an Immunization
@@ -134,6 +144,16 @@ impl Immunization {
     /// Create a new immunization with the given information
     pub fn new(name: String, date: String) -> Self {
         Self { name, date }
+    }
+
+    /// Return the name
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    /// Return the date
+    pub fn date(&self) -> String {
+        self.date.clone()
     }
 }
 
@@ -154,6 +174,21 @@ impl Procedure {
             date,
             description,
         }
+    }
+
+    /// Return the name
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    /// Return the date
+    pub fn date(&self) -> String {
+        self.date.clone()
+    }
+
+    /// Return the description
+    pub fn description(&self) -> String {
+        self.description.clone()
     }
 }
 

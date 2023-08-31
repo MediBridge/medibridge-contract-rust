@@ -145,3 +145,72 @@ fn test_update_patient_details() {
     assert_eq!(patient.gender(), "Female".to_string());
     assert_eq!(patient.blood_type(), "A-".to_string());
 }
+
+#[test]
+fn test_patient_allergy_immunization_procedure() {
+    // Arrange
+    // Create a new context with the test account.
+    let mut context = get_context(accounts(1));
+    // Initialize the mocked blockchain
+    testing_env!(context.build());
+
+    // Set the testing environment for the subsequent calls
+    testing_env!(context.predecessor_account_id(accounts(1)).build());
+
+    let mut contract = Contract::new();
+
+    // Act
+    // Call the add_patient method to create the new patient.
+    contract.add_patient(
+        "Jack Johnson".to_string(),
+        "01/02/2023".to_string(),
+        "Male".to_string(),
+        "A+".to_string(),
+    );
+
+    // Add a new allergy to the patient's allergies
+    contract.add_allergy("Peanuts".to_string(), "Mild".to_string());
+
+    // Add a new immunization to the patient's immunizations
+    contract.add_immunization("Flu Shot".to_string(), "01/01/2021".to_string());
+
+    // Add a new procedure to the patient's procedures
+    contract.add_procedure(
+        "Appendectomy".to_string(),
+        "01/01/2021".to_string(),
+        "N/A".to_string(),
+    );
+
+    // Add another allergy to the patient's allergies
+    contract.add_allergy("Shellfish".to_string(), "Severe".to_string());
+
+    // Assert
+    // Assert that the patient was created successfully.
+    assert!(contract.patients.contains_key(&accounts(1)));
+
+    // Call get_patient method to get the patient information
+    let patient = contract.get_patient();
+
+    // Assert that the patient was created successfully.
+    assert_eq!(patient.full_name(), "Jack Johnson".to_string());
+    assert_eq!(patient.birthday(), "01/02/2023".to_string());
+    assert_eq!(patient.gender(), "Male".to_string());
+    assert_eq!(patient.blood_type(), "A+".to_string());
+
+    // Assert that the patient has the correct number of records, allergies, immunizations, and procedures
+    assert!(patient.records().is_empty());
+    assert_eq!(patient.allergies().len(), 2);
+    assert_eq!(patient.immunizations().len(), 1);
+    assert_eq!(patient.procedures().len(), 1);
+
+    // Assert that the patient has the correct allergies, immunizations, and procedures
+    assert_eq!(patient.allergies()[0].allergen(), "Peanuts".to_string());
+    assert_eq!(patient.allergies()[0].severity(), "Mild".to_string());
+    assert_eq!(patient.allergies()[1].allergen(), "Shellfish".to_string());
+    assert_eq!(patient.allergies()[1].severity(), "Severe".to_string());
+    assert_eq!(patient.immunizations()[0].name(), "Flu Shot".to_string());
+    assert_eq!(patient.immunizations()[0].date(), "01/01/2021".to_string());
+    assert_eq!(patient.procedures()[0].name(), "Appendectomy".to_string());
+    assert_eq!(patient.procedures()[0].date(), "01/01/2021".to_string());
+    assert_eq!(patient.procedures()[0].description(), "N/A".to_string());
+}
