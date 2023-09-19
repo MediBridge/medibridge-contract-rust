@@ -208,6 +208,7 @@ pub struct Patient {
 
 impl Patient {
     /// Create a new patient with the given information
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         full_name: String,
         birthday: String,

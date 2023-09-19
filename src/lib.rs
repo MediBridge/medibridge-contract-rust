@@ -11,7 +11,6 @@ use near_sdk::{
 #[cfg(test)]
 mod tests;
 mod types;
-mod utils;
 
 // Define the contract
 #[near_bindgen]
@@ -273,7 +272,6 @@ impl Contract {
         condition: String,
         record_data: String,
         date: String,
-        public: bool,
     ) {
         let account_id = env::predecessor_account_id();
         require!(
@@ -291,15 +289,6 @@ impl Contract {
         // Create a new medical record
         let medical_record = MedicalRecord::new(id, condition, record_data, date);
 
-        if public {
-            let public_medical_record = PublicRecord::new(
-                RecordType::MedicalRecord(medical_record.clone()),
-                patient.birthday(),
-                patient.gender(),
-            );
-            self.public_records.push(&public_medical_record);
-        }
-
         // Update the patient's medical records vector
         patient.add_medical_record(medical_record);
 
@@ -308,7 +297,45 @@ impl Contract {
         log!("Added medical record for patient with ID: {}", account_id);
     }
 
+    /// Add a new PUBLIC medical record
+    pub fn add_public_medical_record(
+        &mut self,
+        id: u64,
+        condition: String,
+        record_data: String,
+        date: String,
+    ) {
+        let account_id = env::predecessor_account_id();
+        require!(
+            self.patients.contains_key(&account_id),
+            "Only registered patients can add public medical records."
+        );
+        log!("ID: {}", id);
+        log!("Condition: {}", condition);
+        log!("Record Data: {}", record_data);
+        log!("Date: {}", date);
+
+        // Retrieve patient information.
+        // We only need this to get the patient's birthday and gender
+        // (required for the PublicRecord struct)
+        let patient = self.patients.get(&account_id).expect("Patient not found.");
+
+        // Create a new medical record
+        let medical_record = MedicalRecord::new(id, condition, record_data, date);
+
+        // Add the medical record to the public records
+        let public_medical_record = PublicRecord::new(
+            RecordType::MedicalRecord(medical_record.clone()),
+            patient.birthday(),
+            patient.gender(),
+        );
+        self.public_records.push(&public_medical_record);
+
+        log!("Added a new public medical record");
+    }
+
     /// Add a new treatment for the calling account
+    #[allow(clippy::too_many_arguments)]
     pub fn add_treatment(
         &mut self,
         id: u64,
